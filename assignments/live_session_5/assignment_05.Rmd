@@ -1,0 +1,160 @@
+
+---
+title: "Live session assignment 05"
+author: "Samira Zarandioon"
+date: "2/19/2017"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+# Question 1
+
+1. Standard deviation of values less than 45:
+    ```{r}
+    testdata <- c(45.4,44.2,36.8,35.1,39.0,60.0,47.4,41.1,45.8,35.6)
+    sd(testdata[testdata<45])
+    ```
+1. Number of vectors entries that are less than 45:
+    ```{r}
+    sum(testdata<45)
+    ```
+1. Number of entries between 40 and 55:
+    ```{r}
+    sum(testdata>40 & testdata<55)
+    ```
+1. Proportion of data vector exceeding 40:
+    ```{r}
+    n1 <- sum(testdata>40)
+    l <- length(testdata)
+    n1/l
+    ```
+
+# Question 2:
+
+```{r}
+cigsales_df <- read.table("./cigsales.txt",header=TRUE)
+```
+
+1. States that have over a 15% African American population:
+    ```{r}
+    cigsales_df[cigsales_df$black>15,c("state")]
+    ```
+     or:
+    ```{r}
+    subset(cigsales_df, black>15, select = c("state"))
+    ```
+
+1. Price vector:  
+    ```{r}
+    price.vec <- cigsales_df[,c("price")]
+    price.vec
+    ```
+    
+1. Poor vs. rich:
+    ```{r}
+    income_median <- median(cigsales_df$income)
+    poor <- cigsales_df[cigsales_df$income < income_median,c("income")]
+    poor
+    rich <- cigsales_df[cigsales_df$income >= income_median,c("income")]
+    rich
+    ```
+
+# Question 3
+
+1. Example 1: Function *trim* gets a vector as well as lower and upper bound and as output returns a vector containing the elements that are between the lower and upper bound. See the following execution as an example.
+
+    ```{r}
+    trim <-function(x, lower=0.0, upper=1.0){
+    indicies <- x >= lower & x<= upper
+    return (x[indicies])
+    }
+    data <- c(3,6,2,1,8,10)
+    trim(data,3,8)
+    ```
+1. Example 2: This function operates exactly as the previous function. The only differance is that its definition is more consise. 
+    ```{r}
+    trim <- function(x, lower=0.0, upper=1.0) x[x>=lower & x<=upper]
+    data <- c(3,6,2,1,8,10)
+    trim(data,3,8)
+    ```
+1. Example 3: Function *sumdice* simulates throughing a fair six-sided die for n times and returns the sum of the dots that comes up. The following illustrates an application of the function:
+    ```{r}
+    sumdice <- function(n) {
+    k<-sample(1:6, size=n,replace= TRUE)
+    return(sum(k))
+    }
+    sumdice(5)
+    ```
+  
+# Question 4:
+
+We expect to get (1+6)/2 (ie. 3.5) dots. To get a reliable estimate of number of dice we can call *sumdice* function with a sufficiently large n (eg. 100000) and then divided by n:
+
+```{r}
+sumdice(100000)/100000
+```
+
+# Question 5:
+
+There are two variable x: one x is defined outside the function and another one is defined inside the function definition. The scope of x inside the function is limited within the function, while the outside x is global. The internal x hights the external x, therefore the assignment inside function does not impact the external x. The variable y is the input parameters of the function and similar to the internal x it's scope is limited to the function definition. The following code execution illustrates this: 
+
+```{r}
+x<-42
+fred <- function(y) {
+  x <- y
+  return (y+x)
+}
+fred(13)
+x
+```
+
+# Question 6:
+
+```{r}
+diff <- function(v) abs(mean(v) - median(v))
+diff(price.vec)
+```
+
+# Question 7:
+
+It prints numbers from 4 to 23. See the following for a sample execution: 
+ 
+```{r}
+for (i in 1:20) {
+  print(i+3)
+}
+```
+
+# Question 8:
+
+We can compute the probablities by drawing large number of samples from the normal distributions and dividing number of samples that have the specific condition by the total number of samples.
+The following lagic computes the requested probablities:
+
+1. X <= 66 :
+    ```{r}
+    n <- 10000000
+    v <- rnorm(n, mean=60, sd=60)
+    length(v[v<=66])/n
+    ```
+
+1. 50 < X < 60 :
+    ```{r}
+    n <- 10000000
+    v <- rnorm(n, mean=60, sd=60)
+    length(v[v<60 & v>5])/n
+    ```
+    
+1. X > 68 :
+    ```{r}
+    n <- 10000000
+    v <- rnorm(n, mean=60, sd=60)
+    length(v[v>68])/n
+    ```
+
+# Question 9:
+
+The HTML file of the live session assignment 04 is included in the file called *assignment_4.html*.
+
+

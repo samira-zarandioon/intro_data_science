@@ -1,0 +1,108 @@
+---
+title: "Live Session 07 Assignment"
+author: "Samira Zarandioon"
+date: "3/5/2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Question 1
+
+b. Following the tip, we use the program for part b to solve part a:
+
+```{r}
+# Converts input prameter from base 10 to 7
+base10to7 <- function(x) {
+  i <- 0
+  sum <- 0
+  while(x%/%7!=0){
+    sum <- sum + ( (x%%7) * (10^i) )
+    i <- i+1
+    x <- x%/%7
+  }
+  sum <- sum + ( (x%%7) * (10^i) )
+  return(sum)
+}
+base10to7(101)
+```
+
+a. 
+
+```{r}
+# Counts in base 7 up to the input parameter
+p7 <- function(n) {
+  base_7_seq = c()
+  for(i in 0:(n-1)) {
+    base_7_seq = c(base_7_seq, base10to7(i))
+  }
+  return(base_7_seq)
+}
+p7(5)
+p7(15)
+p7(52)
+```
+
+c.
+
+```{r}
+# Convert the input parameter form base 7 to base 10
+base7to10 <- function(x){
+  i=0
+  sum=0
+  while(x!=0){
+    d<-x%%10
+    sum<-sum+d*7^i
+    x<-(x-d)/10
+    i<-i+1
+  }
+  return(sum)
+}
+base7to10(202)
+```
+
+d.
+
+```{r}
+# Convert the input parameter to the base parameter that is specified as the second parameter
+base10tok <- function(x,k) {
+  i=0
+  sum=0
+  while(x%/%k!=0){
+    sum<-sum+((x%%k)*(10^i))
+    i=i+1
+    x<-x%/%k
+  }
+  sum<-sum+((x%%k)*(10^i))
+  return(sum)
+}
+base10tok(100,5)
+```
+
+```{r}
+# Counts up to the first input parameter in base that is specified as the second parameter
+pk <- function(n,k) {
+  base_k_seq = c()
+  for(i in 0:(n-1)) {
+    base_k_seq = c(base_k_seq, base10tok(i,k))
+  }
+  return(base_k_seq)
+}
+pk(5,3)
+```
+
+```{r}
+# Converts the first input parameter from base 10 to the base that is specified as the second parameter
+baseKto10 <- function(x, k){
+  i=0
+  sum=0
+  while(x!=0){
+    d<-x%%10
+    sum<-sum+d*k^i
+    x<-(x-d)/10
+    i<-i+1
+  }
+  return(sum)
+}
+baseKto10(202,3)
+```

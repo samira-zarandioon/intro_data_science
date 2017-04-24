@@ -1,0 +1,116 @@
+---
+title: "Assignment 10"
+author: "Samira Zarandioon"
+date: "April 1, 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+1. Fist we download the data:
+    ```{r}
+    library(downloader)
+    download("http://stat.columbia.edu/~rachel/datasets/nyt1.csv", destfile="nyt1.csv")
+    ```
+
+2. Add new variable ageGroup for the following groups: < 18, 18–24, 25–34, 35–44, 45–54, 55–64 and 65+
+
+    ```{r}
+    nyt_dataframe <- read.csv("nyt1.csv", stringsAsFactors=FALSE, header=TRUE)
+    nyt_dataframe$ageGroup[nyt_dataframe$Age<18] <- "<18"
+    nyt_dataframe$ageGroup[nyt_dataframe$Age>=18 & nyt_dataframe$Age<=24 ] <- "18–24"
+    nyt_dataframe$ageGroup[nyt_dataframe$Age>=25 & nyt_dataframe$Age<=34 ] <- "25-34"
+    nyt_dataframe$ageGroup[nyt_dataframe$Age>=35 & nyt_dataframe$Age<=44 ] <- "35–44"
+    nyt_dataframe$ageGroup[nyt_dataframe$Age>=45 & nyt_dataframe$Age<=54 ] <- "45–54"
+    nyt_dataframe$ageGroup[nyt_dataframe$Age>=55 & nyt_dataframe$Age<=64 ] <- "55–64"
+    nyt_dataframe$ageGroup[nyt_dataframe$Age>=65] <- "65+"
+    ```
+
+3. Create a sub data set called ImpSub that contains rows with Impressions>0:
+
+    ```{r}
+    ImpSub<-nyt_dataframe[nyt_dataframe$Impressions>0,]
+    ```
+
+4. Create a new variable called click-through-rate (CTR = click/impression)
+    ```{r}
+    ImpSub$CTR = ImpSub$Clicks / ImpSub$Impressions
+    ```
+
+5. Use this ImpSub data set to do further analysis.
+
+6. Plot distributions of number impressions and click-through-rate (CTR = click/impression) for the age groups.
+
+    ```{r}
+    #install.packages("ggplot2")
+    library(ggplot2)
+    ggplot(ImpSub, aes(x=Impressions, fill=ageGroup)) +
+        geom_histogram(binwidth=1, position="dodge")
+    ```
+
+
+
+    ```{r}
+    #install.packages("ggplot2")
+    library(ggplot2)
+    ggplot(ImpSub, aes(x=CTR, fill=ageGroup)) +
+        geom_histogram(binwidth=.1, position="dodge")
+    ```
+7. Define a new variable to segment users based on click -through-rate (CTR) behavior CTR< 0.2, 0.2<=CTR <0.4, 0.4<= CTR<0.6, 0.6<=CTR<0.8, CTR>0.8.
+
+    ```{r}
+    ImpSub$CTRGroup[ImpSub$CTR<.2] <- "CTR<0.2"
+    ImpSub$CTRGroup[ImpSub$CTR>=.2 & ImpSub$CTR<.4] <- ".2<=CTR<0.4"
+    ImpSub$CTRGroup[ImpSub$CTR>=.4 & ImpSub$CTR<.6] <- ".4<=CTR<0.6"
+    ImpSub$CTRGroup[ImpSub$CTR>=.6 & ImpSub$CTR<.8] <- ".6<=CTR<0.8"
+    ImpSub$CTRGroup[ImpSub$CTR>=.8] <- "CTR>=0.8"
+    ```
+
+8. Get the total number of Male, Impressions, Clicks and Signed_In (0=Female, 1=Male)
+  
+    ```{r}
+    cat("Number of Male: ",sum(ImpSub$Gender),"\n")
+    cat("Number of Impressions: ",sum(ImpSub$Impressions),"\n")
+    cat("Number of Clicks: ",sum(ImpSub$Clicks),"\n")
+    cat("Number of Signed In: ",sum(ImpSub$Signed_In))
+    ```
+
+9. Get the mean of Age, Impressions, Clicks, CTR and percentage of males and signed_In 
+
+    ```{r}
+    cat("Average of Age: ",mean(ImpSub$Age),"\n")
+    cat("Average of Impressions: ",mean(ImpSub$Impressions),"\n")
+    cat("Average of Clicks: ",mean(ImpSub$Clicks),"\n")
+    cat("Average of CTR: ",mean(ImpSub$CTR),"\n")
+    cat("Percentage of Males: ", 100 * sum(ImpSub$Gender)/nrow(ImpSub),"\n")
+    cat("Percentage of Signed In: ", 100 * sum(ImpSub$Signed_In)/nrow(ImpSub),"\n")
+    ```
+
+10. Get the means of Impressions, Clicks, CTR and percentage of males and signed_In  by AgeGroup.
+
+    ```{r}
+    aggregate(ImpSub[,c("Age","Impressions","Clicks","CTR")],list(ImpSub$ageGroup),mean)
+    ```
+    ```{r}
+    aggregate(list(male_perc=ImpSub$Gender,signed_in_perc=ImpSub$Signed_In), by=list(age_group=ImpSub$ageGroup), FUN = function(x) 100*sum(x)/length(x) )
+    ```
+11. Create a table of CTRGroup vs AgeGroup counts.
+
+    ```{r}
+    aggregate(list(count=ImpSub$ageGroup), by=list(age_group=ImpSub$ageGroup, ctr_group=ImpSub$CTRGroup), FUN = length )
+    ```
+12. Plot distributions of number impressions and click-through-rate (CTR = click/impression) for the age groups
+    This is a duplicate question. Please see the question number 6 for the answer.
+
+13. One more plot you think which is important to look at.
+     The following graphs show the distribution of impressions based on CTRGroups:
+
+    ```{r}
+    #install.packages("ggplot2")
+    library(ggplot2)
+    ggplot(ImpSub, aes(x=Impressions, fill=CTRGroup)) +
+        geom_histogram(binwidth=1, position="dodge")
+    ```
+
+
+14. Submit your file (any format) in to Live session Unit 10 Assignment

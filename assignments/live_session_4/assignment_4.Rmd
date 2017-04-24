@@ -1,0 +1,96 @@
+---
+title: "Live Session Assignment 04"
+author: "Samira Zarandioon"
+date: "2/11/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# 1. Basic Math
+1. The log of a positive number (12):
+    ```{r}
+    log(12)
+    ```
+1. The default base is Euler's number (e = 2.71828). To calculate the log of 12 with 2 as base, we have the following two options:
+    1. Use the **base** parameter:
+        ```{r}
+        log(12, base=2)
+        ```
+    2. Use math formula ($log^a_b / log^c_b = log^a_c$):
+        ```{r}
+        log(12) / log(2)
+        ```
+3. Log of negative number (i.e. -12) is not defined, therefore it produces NaN (Not a Number) value and outputs a warning message:
+    ```{r}
+    log(-12)
+    ```
+4. Square root of a poitive number (16):
+    ```{r}
+    sqrt(16)
+    ```
+        
+#2. Random number generation.
+
+1. 15 random samples drawn from normal distribuiotn with mean 0 and sd 1:
+    ```{r}
+    v <- rnorm(15)
+    mean(v)
+    sd(v)
+    ```
+1. 15 random samples drawn from normal distribuiotn with mean 10 and sd 2:
+    ```{r}
+    v <- rnorm(15, mean=10, sd=2)
+    mean(v)
+    sd(v)
+    ```
+1. They are not exactly the same because number of samples (15) is fairly small. The larger number of sample is, the closer the means and sd are to the normal distribution.
+
+#3.Vector Operation.
+
+1. The weights
+1. Their hights
+1. In R:
+    ```{r} 
+    weights <- c(60,72,57,90,95,72)
+    heights <- c(1.80,1.85,1.72,1.90,1.74,1.91)
+    weights
+    heights
+    ```
+1. Scatter Plot: 
+    ```{r}
+    plot(weights,heights)
+    ```
+    Aproximatly we can divide the data points into three categories.
+1. BMI:
+    ```{r}
+    BMI <- weights/(heights*heights)
+    BMI
+    ```
+1. Mean for Weights:
+    ```{r}
+    mean_weights <- mean(weights)
+    mean_weights
+    ```
+1. Deviation:
+    ```{r}
+    deviations <- weights - mean_weights
+    deviations
+    ```
+1. Sum of Deviations:
+    ```{r}
+    sum_deviations <- sum(deviations)
+    sum_deviations
+    ```
+# 4. Data Science Profile
+
+```{r}
+skills <- c("Computer Programming", "Math", "Statistics", "Machine Learning", "Domain Experties", "Communication", "Presentation Skills", "Data Visualization")
+rank <- c(2, 4, 4, 2, 3, 3, 3, 3)
+skills_rank <- data.frame(skills,rank)
+par(mar=c(10,2,5,2)) # set margin so that labels fit, c(bottom, left, top, right)
+par(las=2) # labels perpendicular to the axis
+barplot(skills_rank$rank, names.arg=skills_rank$skills)
+```
+
+  
